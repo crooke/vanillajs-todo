@@ -29,11 +29,7 @@
     var todoName = app.input.value;
     console.log(todoName);
     app.addNewItem({name: todoName});
-  })
-
-  document.getElementById('delete').addEventListener('click', function (e) {
-    consolse.log(e.target.parentNode.textContent);
-  })
+  });
 
   // ***************************************************************************
   // *                     Methods to update/refresh the UI                    *
