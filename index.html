@@ -12,16 +12,8 @@
 		</form>
 		
 		<ul id="list">
-			<li class="list-item list-item-template" hidden><button name="delete" onclick="deleteTodo(event)">x</button></li>
+			<li class="list-item list-item-template" hidden><button class="delete">x</button></li>
 		</ul>
 	</div>
-
-	<script src="index.js"></script>
-	<script type="text/javascript">
-		function deleteTodo(event) {
-			console.log(event.target.parentElement);
-			event.target.parentElement.remove();
-		}
-	</script>
 </body>
 </html>

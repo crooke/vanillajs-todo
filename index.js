@@ -31,6 +31,14 @@
     app.addNewItem({name: todoName});
   });
 
+  function deleteTodo(event) {
+    var li = event.target.parentElement;
+    var todoName = li.textContent;
+    console.log('Removing: ', todoName);
+    //app.items.remove(app.items.find(todoName));
+    li.remove();
+  };
+
   // ***************************************************************************
   // *                     Methods to update/refresh the UI                    *
   // ***************************************************************************
@@ -40,9 +48,12 @@
     var li = app.template.cloneNode(true);
     li.classList.remove('list-item-template');
     li.removeAttribute('hidden');
+    li.querySelector('.delete').onclick = deleteTodo;
     var itemNode = document.createTextNode(item.name);
     li.appendChild(itemNode);
     document.getElementById('list').appendChild(li);
+
+    // Reset the input and add button
     app.input.value = '';
     app.btnAdd.disabled = true;
   }
