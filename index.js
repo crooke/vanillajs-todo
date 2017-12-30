@@ -22,7 +22,7 @@
   // *                    UI Component Event Listeners                         *
   // ***************************************************************************
   app.view.todoInput.addEventListener('input', function (e) {
-    if (this.value) {
+    if (e.target.value) {
       app.view.btnAddTodo.disabled = false;
     } else {
       app.view.btnAddTodo.disabled = true;
@@ -37,9 +37,9 @@
 
   function btnDeleteTodo(event) {
     var li = event.target.parentElement;
-    var id = app.view.getTodoId(li)
+    var id = app.view.getTodoId(li);
     app.deleteTodo(id);
-  };
+  }
 
 
   // ***************************************************************************
@@ -90,7 +90,6 @@
     var todoNode = document.createTextNode(todo.desc);
     li.appendChild(todoNode);
     document.getElementById('list').appendChild(li);
-  
     // Reset the input and add button
     app.view.todoInput.value = '';
     app.view.btnAddTodo.disabled = true;
@@ -100,11 +99,11 @@
     id = 'todo-' + id;
     var todo = document.getElementById(id);
     todo.remove();
-  }
+  };
 
   app.view.getTodoId = function (listNode) {
-    var idList = listNode.id.split('-')
-    return idList[idList.length - 1]
+    var idList = listNode.id.split('-');
+    return idList[idList.length - 1];
   };
 
 
