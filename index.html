@@ -5,7 +5,15 @@
 </head>
 <body>
 	<h1>Todo List</h1>
-	<div>
+	<div id="container">
+		<input id="todoInput" type="text" name="new-todo">
+		<button id="btnAdd" disabled='true'>Add</button>
+
+		<ul id="list">
+			<li class="list-item list-item-template" hidden><button id="delete">x</button></li>
+		</ul>
 	</div>
+
+	<script src="index.js"></script>
 </body>
 </html>
