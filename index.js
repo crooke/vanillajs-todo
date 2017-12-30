@@ -7,10 +7,7 @@
         { id: 0, desc: 'Haircut' },
         { id: 1, desc: 'Change oil' },
         { id: 2, desc: 'Read book' }
-      ],
-      addTodo: function (desc) {
-        console.log('TODO: Implement adding a new todo');
-      }
+      ]
     },
 
     view: {
@@ -18,32 +15,31 @@
       btnAddTodo: document.getElementById('btnAdd'),
       todoTemplate: document.querySelector('.list-item-template')
     }
-  }
+  };
 
 
   // ***************************************************************************
-  // *                       UI Component Event Listeners                      *
+  // *                    UI Component Event Listeners                         *
   // ***************************************************************************
   app.view.todoInput.addEventListener('input', function (e) {
-    if (e.target.value) {
-      app.btnAdd.disabled = false;
+    if (this.value) {
+      app.view.btnAddTodo.disabled = false;
     } else {
-      app.btnAdd.disabled = true;
+      app.view.btnAddTodo.disabled = true;
     }
   });
 
-  view.btnAddTodo.addEventListener('click', function (e) {
+  app.view.btnAddTodo.addEventListener('click', function (e) {
+    e.preventDefault();
     var desc = app.view.todoInput.value;
     app.addTodo(desc);
   });
 
-  // function deleteTodo(event) {
-  //   var li = event.target.parentElement;
-  //   var todoName = li.textContent;
-  //   console.log('Removing: ', todoName);
-  //   //app.items.remove(app.items.find(todoName));
-  //   li.remove();
-  // };
+  function btnDeleteTodo(event) {
+    var li = event.target.parentElement;
+    var id = app.view.getTodoId(li)
+    app.deleteTodo(id);
+  };
 
 
   // ***************************************************************************
@@ -52,44 +48,65 @@
   app.addTodo = function (desc) {
     var todo = app.model.addTodo(desc);
     app.view.addTodo(todo);
-  }
+    console.log('Todos model now looks like: '
+      + JSON.stringify(app.model.todos, null, ' '));
+  };
 
   app.deleteTodo = function (id) {
     app.model.deleteTodo(id);
     app.view.deleteTodo(id);
-  }
+    console.log('Todos model now looks like: '
+      + JSON.stringify(app.model.todos, null, ' '));
+  };
+
+  // ***************************************************************************
+  // *                            Model Methods                                *
+  // ***************************************************************************
+
+  app.model.addTodo = function (desc) {
+    var id = getHighestIndex(app.model.todos) + 1;
+    var todo = { id: id, desc: desc };
+    app.model.todos.push(todo);
+    return todo;
+  };
+
+  app.model.deleteTodo = function (id) {
+    app.model.todos = app.model.todos.filter(function (todo) {
+      return todo.id != id;
+    });
+  };
 
 
   // ***************************************************************************
   // *                            View Methods                                 *
   // ***************************************************************************
 
-  // Updates the list of todos
   app.view.addTodo = function (todo) {
-    var li = app.template.cloneNode(true);
+    var li = app.view.todoTemplate.cloneNode(true);
     li.classList.remove('list-item-template');
     li.removeAttribute('hidden');
-    li.querySelector('.delete').onclick = deleteTodo;
-    var itemNode = document.createTextNode(item.name);
-    li.appendChild(itemNode);
+    li.id = 'todo-' + todo.id;
+    li.querySelector('.delete').onclick = btnDeleteTodo;
+    var todoNode = document.createTextNode(todo.desc);
+    li.appendChild(todoNode);
     document.getElementById('list').appendChild(li);
-
+  
     // Reset the input and add button
-    app.input.value = '';
-    app.btnAdd.disabled = true;
+    app.view.todoInput.value = '';
+    app.view.btnAddTodo.disabled = true;
+  };
+
+  app.view.deleteTodo = function (id) {
+    id = 'todo-' + id;
+    var todo = document.getElementById(id);
+    todo.remove();
   }
 
-  // ***************************************************************************
-  // *                            Model Methods                                *
-  // ***************************************************************************
-
-  app.model.addTodo = function(desc) {
-    id = getHighestIndex(app.model.todos);
-    todo = {id: id, desc: desc};
-    app.model.todos.push(todo);
-    console.log('Added new todo to the model:', todo);
-    return todo;
+  app.view.getTodoId = function (listNode) {
+    var idList = listNode.id.split('-')
+    return idList[idList.length - 1]
   };
+
 
   // ***************************************************************************
   // *                            Helper Methods                                *
